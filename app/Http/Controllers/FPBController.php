@@ -20,7 +20,7 @@ class FPBController extends Controller
     public function create()
     {
         $user = User::where('status', 10)->where('role', 1)->get();
-        $product = Product::with(['location','categoryProduct'])->get();
+        $product = Product::all();
         return view('fpb.create', compact('user','product'));
         
     }
@@ -29,6 +29,16 @@ class FPBController extends Controller
     {
         $user = User::where('id', $request->id)->with(['departement'])->first();
         return $user;
+    }
 
+    public function getProduct(Request $request)
+    {
+        $product = Product::where('id', $request->id)->with(['location','categoryProduct'])->first();
+        return $product;
+    }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
     }
 }

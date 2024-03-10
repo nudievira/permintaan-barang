@@ -10,19 +10,19 @@
     .btn {
         margin-left: auto;
     }
-    
 </style>
 @section('content')
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">DataTable with default features</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <form>
+                <form id="create_lpbb" method="POST" class="mt-3" action="{{ route('fpb.store') }}">
+                    @csrf
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">DataTable with default features</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <!-- text input kiri -->
@@ -32,7 +32,7 @@
                                     </div> --}}
                                     <div class="form-group">
                                         <span>NIK Peminta</span>
-                                        <select id="nik_user" class="form-control select2" style="width: 100%;">
+                                        <select id="nik_user" class="form-control select2" name="idUser" style="width: 100%;">
                                             <option value="">Pilih NIK Karyawan</option>
                                             @foreach ($user as $item)
                                                 <option value="{{ $item->id }}">{{ $item->NIK }}</option>
@@ -59,7 +59,7 @@
                             <div class="form-group" style="width: 33%;">
                                 <span>Tanggal Permintaan :</span>
                                 <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input"
+                                    <input type="text" name="dateRequest" class="form-control datetimepicker-input"
                                         data-target="#reservationdate" />
                                     <div class="input-group-append" data-target="#reservationdate"
                                         data-toggle="datetimepicker">
@@ -69,7 +69,8 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <label>Daftar Barang</label>
-                                <span class="btn btn-sm btn-success mb-2" id="add_product"><i class="fas fa-plus-circle"></i>
+                                <span class="btn btn-sm btn-success mb-2" id="add_product"><i
+                                        class="fas fa-plus-circle"></i>
                                     Tambah</span>
                             </div>
                             <table class="table table-bordered table-striped" id="myTable">
@@ -89,12 +90,13 @@
 
                                 </tbody>
                             </table>
-
-
-                        </form>
-                        <!-- /.card-body -->
+                            <!-- /.card-body -->
+                        </div>
                     </div>
-                </div>
+                    <div class="justify-content-end px-3" style="text-align: end">
+                        <button class="btn btn-outline-primary btn-sm" id="save_fpb">Kirim</button>
+                    </div>
+                </form>
                 <!-- /.card-body -->
             </div>
             <!-- /.card -->

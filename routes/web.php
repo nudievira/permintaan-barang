@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('data-table', 'FPBController@dataTable')->name('dataTable');
         Route::get('create', 'FPBController@create')->name('create');
         Route::get('get-user', 'FPBController@getUser')->name('getUser');
+        Route::get('get-product', 'FPBController@getProduct')->name('getProduct');
+        Route::post('store', 'FPBController@store')->name('store');
     });
 
 });

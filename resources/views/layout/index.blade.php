@@ -88,6 +88,8 @@
     <!-- dropzonejs -->
     <script src="../../plugins/dropzone/min/dropzone.min.js"></script>
     <!-- AdminLTE App -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @stack('javascript-bottom')
 
     {{-- <script src="../../dist/js/demo.js"></script> --}}
