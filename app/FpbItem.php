@@ -4,16 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class FpbItem extends Model
 {
-    protected $table = 'location';
+    protected $table = 'fpb_item';
     protected $guarded = [];
     protected $primaryKey = 'id';
     public $timestamps = false;
 
     public function product()
     {
-        return $this->hasMany(Product::class, 'location_id', 'id');
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
 }

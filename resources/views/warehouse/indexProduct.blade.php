@@ -9,18 +9,14 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <a href="{{ route('fpb.create') }}" class="btn btn-outline-info btn-sm"><i
-                                class="fas fa-plus-circle"></i> Permintaan</a>
-                        <table id="list_fpb" class="table table-bordered table-striped datatable">
+                        <table id="list_location" class="table table-bordered table-striped datatable" width="100%">
                             <thead>
                                 <tr>
-                                    <th>NO </th>
-                                    <th>NO FPB</th>
-                                    <th>Nama</th>
-                                    <th>Departement</th>
-                                    <th>Tanggal Permintaan</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th>NO</th>
+                                    <th>Produk</th>
+                                    <th>Satuan</th>
+                                    <th>Kategori</th>
+                                    <th>Kuantiti</th>
                                 </tr>
                             </thead>
                         </table>
@@ -36,6 +32,11 @@
 
 
     @push('javascript-bottom')
-        @include('java-script.fpb.index')
+        <script>
+            $(document).ready(function() {
+                getData({{ $id }})
+            })
+        </script>
+        @include('java-script.warehouse.listProduct')
     @endpush
 @endsection

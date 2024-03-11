@@ -31,6 +31,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('get-user', 'FPBController@getUser')->name('getUser');
         Route::get('get-product', 'FPBController@getProduct')->name('getProduct');
         Route::post('store', 'FPBController@store')->name('store');
+        Route::get('show/{id}', 'FPBController@show')->name('show');
+    });
+
+    Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.'], function () {
+        Route::get('list-location', 'WarehouseController@listLocation')->name('listLocation');
+        Route::get('data-table-location', 'WarehouseController@dataTableLocation')->name('dataTableLocation');
+        Route::get('list-product/{id}', 'WarehouseController@listProduct')->name('listProduct');
+        Route::get('data-table-product', 'WarehouseController@dataTableProduct')->name('dataTableProduct');
     });
 
 });

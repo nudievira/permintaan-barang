@@ -9,17 +9,11 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <a href="{{ route('fpb.create') }}" class="btn btn-outline-info btn-sm"><i
-                                class="fas fa-plus-circle"></i> Permintaan</a>
-                        <table id="list_fpb" class="table table-bordered table-striped datatable">
+                        <table id="list_location" class="table table-bordered table-striped datatable">
                             <thead>
                                 <tr>
-                                    <th>NO </th>
-                                    <th>NO FPB</th>
-                                    <th>Nama</th>
-                                    <th>Departement</th>
-                                    <th>Tanggal Permintaan</th>
-                                    <th>Status</th>
+                                    <th>NO</th>
+                                    <th width="80%">Lokasi</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -36,6 +30,6 @@
 
 
     @push('javascript-bottom')
-        @include('java-script.fpb.index')
+        @include('java-script.warehouse.listLocation')
     @endpush
 @endsection

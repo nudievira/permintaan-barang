@@ -67,7 +67,7 @@
     <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../../dist/js/adminlte.min.js"></script>
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    {{-- <script src="../../plugins/jquery/jquery.min.js"></script> --}}
     <!-- Select2 -->
     <script src="../../plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->
@@ -89,6 +89,18 @@
     <script src="../../plugins/dropzone/min/dropzone.min.js"></script>
     <!-- AdminLTE App -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success_access'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success_access') }}',
+                timer: 4000
+
+            });
+        </script>
+    @endif
+
 
     @stack('javascript-bottom')
 

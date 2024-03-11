@@ -16,7 +16,7 @@ class CreateFpbItemTable extends Migration
         Schema::create('fpb_item', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->integer('qty');
-            $table->string('note', 100);
+            $table->string('note', 100)->nullable();
             $table->integer('fpb_id');
             $table->integer('product_id');
             $table->dateTime('created_at')->nullable();

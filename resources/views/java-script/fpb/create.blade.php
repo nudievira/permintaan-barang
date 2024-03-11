@@ -82,11 +82,11 @@
             '</select></td>' +
             '<td><span id="location_' + increment_index + '"></span></td>' +
             '<td><span id="qty_' + increment_index + '"></span></td>' +
-            '<td><input type="number" name="qtyDelivery[]" class="form-control" id="qty_input_' +
+            '<td><input type="number" value="0" name="qtyDelivery[]" class="form-control qty_product" id="qty_input_' +
             increment_index + '" onInput="qty_input(' + increment_index +
-            ', this.value)"></td>' +
+            ', this)"></td>' +
             '<td><span id="uom_' + increment_index + '"></td>' +
-            '<td><input type="text" class="form-control" name="note[]" id="note_' + increment_index +
+            '<td><input type="text" class="form-control" value="" name="note[]" id="note_' + increment_index +
             '" placeholder="isi keterangan...."></td>' +
             '<td><button class="btn btn-danger btn-sm delete-row"><i class="fas fa-trash"></i></button></td>' +
             '</tr>';
@@ -119,13 +119,14 @@
         $('.select2').select2()
     })
 
-    // $('#myTable').on('change', '#select_item', function() {
-    //     var item_id = $(this).val()
-    //     addedProductIds.push(item_id);
+    var save_id_product = '';
 
-    // });
-        var save_id_product = '';
     function id_item_(params, value) {
+        $('#qty_input_' + params + '').val(0)
+        $('#location_' + params + '').text('')
+        $('#qty_' + params + '').text('')
+        $('#uom_' + params + '').text('')
+
         // console.log(save_id_product);
         var allProductElements = document.querySelectorAll('.allProduct');
 
@@ -176,6 +177,23 @@
             },
             dataType: "JSON",
             success: function(data) {
+                if (data.qty == 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Stock gudang kosong, silahkan pilih produk lain',
+                        customClass: {
+                            confirmButton: 'btn btn-outline-primary',
+                        },
+                        buttonsStyling: false,
+                    })
+                    $('#id_product_' + params).val(0);
+
+                    // Memicu peristiwa perubahan pada select element untuk Select2 menyesuaikan diri
+                    $('#id_product_' + params).trigger('change');
+
+                    return false;
+
+                }
                 $('#location_' + params + '').text(data.location.rak_number)
                 $('#qty_' + params + '').text(data.qty)
                 $('#uom_' + params + '').text(data.uom)
@@ -184,10 +202,21 @@
 
     }
 
-    function qty_input(params, value) {
+    function qty_input(params, input) {
+        input.value = input.value.replace(/-/g, '');
+
+        // Menghapus angka "0" pertama jika ada
+        input.value = input.value.replace(/^0+/, '');
+
+        // Jika nilai input tidak valid, set nilai ke 1
+        if (!isValidInput(input.value)) {
+            input.value = 0;
+        }
+
+
         var stock_qty_str = document.getElementById('qty_' + params).innerHTML; // or use innerText
         var stock_qty = parseInt(stock_qty_str, 10)
-        if (stock_qty < value) {
+        if (stock_qty < input.value) {
             Swal.fire({
                 icon: 'info',
                 title: 'Kuantiti melebihi stok di gudang',
@@ -196,9 +225,105 @@
                 },
                 buttonsStyling: false,
             })
-            $('#qty_input_' + params + '').val('')
+            $('#qty_input_' + params + '').val(0)
             return false;
         }
 
+    }
+
+    $('#create_fpb').submit(function(e) {
+
+        let validate_input_form = true;
+        let validate_qty = true;
+
+        // Flag to track whether to prevent the default behavior
+        var allProductElements = document.querySelectorAll('.allProduct');
+        var allQtyElements = document.querySelectorAll('.qty_product');
+
+        // Membuat loop untuk setiap elemen
+        allProductElements.forEach(function(element) {
+            // Mendapatkan nilai dari setiap elemen
+            var productValue = parseInt(element.value);
+
+            // Memeriksa apakah nilai sama dengan 0
+            if (productValue === 0) {
+                validate_input_form = false; // Set the flag to false if the condition is met
+                return false; // Exit the forEach loop
+
+            }
+        });
+        allQtyElements.forEach(function(elementQty) {
+            // Mendapatkan nilai dari setiap elemen
+            var product_qty = parseInt(elementQty.value);
+
+            // Memeriksa apakah nilai sama dengan 0
+            if (product_qty === 0) {
+                validate_qty = false; // Set the flag to false if the condition is met
+                return false; // Exit the forEach loop
+
+            }
+        });
+        if (allProductElements.length <= 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Mohon tambahkan minimal 1 produk',
+                customClass: {
+                    confirmButton: 'btn btn-outline-primary',
+                },
+                buttonsStyling: false,
+            })
+            return false; // Exit the forEach loop
+
+        }
+        if (!validate_input_form) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Mohon pilih produk terlebih dahulu',
+                customClass: {
+                    confirmButton: 'btn btn-outline-primary',
+                },
+                buttonsStyling: false,
+            })
+            return false; // Exit the forEach loop
+
+        }
+        if (!validate_qty) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Mohon input kuantiti',
+                customClass: {
+                    confirmButton: 'btn btn-outline-primary',
+                },
+                buttonsStyling: false,
+            })
+            return false; // Exit the forEach loop
+
+        }
+
+        e.preventDefault(); // Prevent the default form submission behavior if the flag is true
+
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah anda yakin?',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Batal',
+            customClass: {
+                confirmButton: 'btn btn-sm btn-outline-primary',
+                cancelButton: 'btn btn-sm btn-outline-danger cancel',
+            },
+            buttonsStyling: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $("#create_fpb").off('submit').submit();
+            }
+        });
+    });
+
+
+    function isValidInput(value) {
+        // Periksa apakah nilai hanya terdiri dari "0" atau memiliki format yang benar
+        return /^[1-9]\d*$/.test(value);
     }
 </script>
