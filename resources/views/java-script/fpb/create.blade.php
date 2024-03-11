@@ -88,6 +88,7 @@
             '<td><span id="uom_' + increment_index + '"></td>' +
             '<td><input type="text" class="form-control" value="" name="note[]" id="note_' + increment_index +
             '" placeholder="isi keterangan...."></td>' +
+            '<td id="span_status_' + increment_index + '"></td>' +
             '<td><button class="btn btn-danger btn-sm delete-row"><i class="fas fa-trash"></i></button></td>' +
             '</tr>';
 
@@ -178,22 +179,14 @@
             dataType: "JSON",
             success: function(data) {
                 if (data.qty == 0) {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Stock gudang kosong, silahkan pilih produk lain',
-                        customClass: {
-                            confirmButton: 'btn btn-outline-primary',
-                        },
-                        buttonsStyling: false,
-                    })
-                    $('#id_product_' + params).val(0);
-
-                    // Memicu peristiwa perubahan pada select element untuk Select2 menyesuaikan diri
-                    $('#id_product_' + params).trigger('change');
-
-                    return false;
-
+                    var status_condition = '<span class="badge bg-danger">Kosong</span>'
+                } else {
+                    var status_condition = '<span class="badge bg-success">Terpenuhi</span>'
                 }
+                var spanStatus = document.getElementById('span_status_' + params + '');
+
+                // Memasukkan status ke dalam elemen dengan id "span_status"
+                spanStatus.innerHTML = status_condition;
                 $('#location_' + params + '').text(data.location.rak_number)
                 $('#qty_' + params + '').text(data.qty)
                 $('#uom_' + params + '').text(data.uom)

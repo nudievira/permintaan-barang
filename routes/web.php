@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('get-product', 'FPBController@getProduct')->name('getProduct');
         Route::post('store', 'FPBController@store')->name('store');
         Route::get('show/{id}', 'FPBController@show')->name('show');
+        Route::get('print/{id}', 'FPBController@print')->name('print');
     });
 
     Route::group(['prefix' => 'warehouse', 'as' => 'warehouse.'], function () {

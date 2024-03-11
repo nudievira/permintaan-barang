@@ -7,6 +7,7 @@ use App\FpbItem;
 use App\Helpers\CurrentTimestamp;
 use App\Product;
 use App\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -46,6 +47,7 @@ class FPBController extends Controller
                 ->addColumn('action', function ($data) {
 
                     $btn = ' <a href="' . route('fpb.show', ['id' => $data->id]) . '" class="btn btn-sm btn-outline-primary" ><i class="fas fa-eye"></i> Detail</i></a>
+                    <a href="' . route('fpb.print', ['id' => $data->id]) . '" class="btn btn-sm btn-outline-danger" ><i class="fas fa-print"></i> Print</i></a>
                         ';
                     return $btn;
                 })
@@ -169,5 +171,20 @@ class FPBController extends Controller
             'user.departement'
         ])->first();
         return view('fpb.detail', compact('fpb'));
+    }
+
+    public function print($id)
+    {
+        $fpb = FPB::where('id', $id)->with([
+            'fpbItem.product.location',
+            'user.departement'
+        ])->first();
+        $pdf = Pdf::loadView('fpb.print', compact('fpb'));
+        $pdf->setPaper('A4', 'potrait'); // Atur ukuran kertas dan orientasi
+        $name_pdf = $fpb->no_fpb;
+        $extenison = '.pdf';
+        $combined = $name_pdf . $extenison;
+        return $pdf->stream($combined);
+
     }
 }

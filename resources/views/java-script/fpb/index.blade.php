@@ -72,7 +72,8 @@
                     defaultContent: '-',
                     className: 'text-start',
                     orderable: false,
-                    searchable: false
+                    searchable: false,
+                    width: '15%',
                 }
             ]
         });
